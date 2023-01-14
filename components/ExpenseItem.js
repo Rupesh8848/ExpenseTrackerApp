@@ -1,0 +1,73 @@
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { GlobalStyles } from "../styles";
+import { getFormattedDate } from "../util/date";
+import { useNavigation } from "@react-navigation/native";
+
+const ExpenseItem = ({ id, description, date, amount }) => {
+  const navigation = useNavigation();
+  function expenseItemPressHandler() {
+    navigation.navigate("ManageExpense", { expenseId: id });
+  }
+
+  return (
+    <Pressable
+      onPress={expenseItemPressHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
+      <View style={styles.expenseItem}>
+        <View>
+          <Text style={[styles.textBase, styles.description]}>
+            {description}
+          </Text>
+          <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+        </View>
+        <View style={styles.amountContainer}>
+          <Text style={styles.amountText}>{amount.toFixed(2)}</Text>
+        </View>
+      </View>
+    </Pressable>
+  );
+};
+
+export default ExpenseItem;
+
+const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.75,
+  },
+  expenseItem: {
+    padding: 12,
+    marginVertical: 8,
+    backgroundColor: GlobalStyles.colors.primary500,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 6,
+    elevation: 4, //shadow for androind
+    shadowColor: GlobalStyles.colors.gray500, //shadow for ios
+    shadowRadius: 4,
+    shadowOffset: { width: 1, height: 1 },
+    flex: 1,
+  },
+  textBase: {
+    color: GlobalStyles.colors.primary50,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 4,
+    fontWeight: "bold",
+  },
+  amountContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+    minWidth: 80,
+  },
+  amountText: {
+    color: GlobalStyles.colors.primary500,
+    fontWeight: "bold",
+  },
+});
